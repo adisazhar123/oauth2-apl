@@ -4,53 +4,22 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8171064ee5171d68577d95c436519a85
+class ComposerStaticInitfb9afb879be03a3ccf1d526a200515d9
 {
-    public static $prefixLengthsPsr4 = array (
-        'P' => 
+    public static $prefixesPsr0 = array (
+        'O' => 
         array (
-            'Psr\\Http\\Message\\' => 17,
-        ),
-        'L' => 
-        array (
-            'League\\OAuth2\\Server\\' => 21,
-            'League\\Event\\' => 13,
-            'Lcobucci\\JWT\\' => 13,
-        ),
-        'D' => 
-        array (
-            'Defuse\\Crypto\\' => 14,
-        ),
-    );
-
-    public static $prefixDirsPsr4 = array (
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'League\\OAuth2\\Server\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/league/oauth2-server/src',
-        ),
-        'League\\Event\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/league/event/src',
-        ),
-        'Lcobucci\\JWT\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
-        ),
-        'Defuse\\Crypto\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/defuse/php-encryption/src',
+            'OAuth2' => 
+            array (
+                0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-php/src',
+            ),
         ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8171064ee5171d68577d95c436519a85::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8171064ee5171d68577d95c436519a85::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitfb9afb879be03a3ccf1d526a200515d9::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
