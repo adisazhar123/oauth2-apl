@@ -11,13 +11,14 @@ return new Config(
         'database' => [
             'adapter' => 'Phalcon\Db\Adapter\Pdo\Sqlsrv',
             'host' => 'localhost',
-            'username' => 'user',
-            'password' => 'pass',
-            'dbname' => 'dbname'
+            'username' => 'adis',
+            'password' => '',
+            'dbname' => 'bshaffer',
+            'dsn' => 'mysql:dbname=bshaffer;host=localhost'
         ],   
         
         'url' => [
-            'baseUrl' => 'http://oidc.local/',
+            'baseUrl' => 'http://dev.oauth/',
         ],
         
         'application' => [
