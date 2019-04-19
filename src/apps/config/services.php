@@ -7,12 +7,17 @@ use Phalcon\Security;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
 use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Phalcon\Flash\Direct as FlashDirect;
 use Phalcon\Flash\Session as FlashSession;
 
 // bshaffer
 use OAuth2\Server as OAuth2Server;
 use OAuth2\Storage\Pdo as StoragePdo;
+
+$di['response'] = function() {
+    return new Response();
+};
 
 $di['config'] = function() use ($config) {
 	return $config;
@@ -116,23 +121,23 @@ $di->set(
 
 $di->set('request', new Request());
 
-$di->set('oauth_storage', function() use ($data_source_name, $username, $password) {
+$di->setShared('oauth_storage', function() use ($data_source_name, $username, $password) {
     $storage = new StoragePdo(array('dsn' => $data_source_name, 'username' => $username, 'password' => $password));
 
     return $storage;
 });
 
-$di->set('client_credentials_grant', function() {
+$di->setShared('client_credentials_grant', function() {
     $storage = $this->get('oauth_storage');
     return new OAuth2\GrantType\ClientCredentials($storage);
 });
 
-$di->set('authorization_code_grant', function() {
+$di->setShared('authorization_code_grant', function() {
     $storage = $this->get('oauth_storage');
     return new OAuth2\GrantType\AuthorizationCode($storage);
 });
 
-$di->set('oauth_server', function() {
+$di->setShared('oauth_server', function() use ($data_source_name, $username, $password) {
     $storage = $this->get('oauth_storage');
     $oauth_server = new OAuth2Server($storage);
     
@@ -144,15 +149,4 @@ $di->set('oauth_server', function() {
 
     return $oauth_server;
 });
-
-// $di->set('dashboard_controller',
-// [
-//     'className' => 'App\Oauth\Controllers\Web\DashboardController',
-//     'arguments' => [
-//         [
-//             'type' => 'service',
-//             'name' => 'oauth_server',
-//         ]
-//     ]
-// ]);
 
