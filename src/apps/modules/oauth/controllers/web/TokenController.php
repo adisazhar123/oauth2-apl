@@ -3,8 +3,9 @@
 namespace App\Oauth\Controllers\Web;
 
 use Phalcon\Mvc\Controller;
+// use OAuth2\Server as OAuth2Server;
 
-class DashboardController extends Controller
+class TokenController extends Controller
 {
     private $_oauth_server;
     private $_response;
@@ -14,13 +15,7 @@ class DashboardController extends Controller
         $this->_response = $this->di->get('response');
     }
 
-    // default routing requires 'Action'
-    public function indexAction()
-    {
-        return $this->view->pick('dashboard/index');
-    }    
-
+    public function indexAction() {
+        $this->_oauth_server->handleTokenRequest(\OAuth2\Request::createFromGlobals())->send();           
+    }
 }
-
-
-?>

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Oauth;
+namespace App\Client;
 
-use Phalcon\Loader;
-use Phalcon\Mvc\View;
 use Phalcon\DiInterface;
-use Phalcon\Mvc\View\Engine\Volt;
+use Phalcon\Loader;
 use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Engine\Volt;
 
 class Module implements ModuleDefinitionInterface
 {   
@@ -18,9 +18,9 @@ class Module implements ModuleDefinitionInterface
         $loader = new Loader();
 
         $loader->registerNamespaces([
-            'App\Oauth\Controllers\Web' => __DIR__ . '/controllers/web',
-            'App\Oauth\Controllers\Api' => __DIR__ . '/controllers/api',
-            'App\Oauth\Models' => __DIR__ . '/models'
+            'App\Client\Controllers\Web' => __DIR__ . '/controllers/web',
+            'App\Client\Controllers\Api' => __DIR__ . '/controllers/api',
+            'App\Client\Models' => __DIR__ . '/models'
         ]);
 
         $loader->register();
@@ -45,6 +45,10 @@ class Module implements ModuleDefinitionInterface
             return $view;
         };
 
+        $di->set('oauth_client', function() {
+            $config = INCLUDE dirname(__FILE__) . '/config/config.php';
+            return $config;
+        });
     }
 }
 ?>

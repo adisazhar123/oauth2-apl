@@ -1,19 +1,20 @@
 <?php
 
-use Phalcon\Logger\Adapter\File as Logger;
-use Phalcon\Session\Adapter\Files as Session;
-use Phalcon\Http\Response\Cookies;
-use Phalcon\Security;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
+use Phalcon\Security;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Phalcon\Mvc\Dispatcher;
+use Phalcon\Db\Adapter\Pdo\Mysql;
+use OAuth2\Server as OAuth2Server;
+use Phalcon\Http\Response\Cookies;
+use OAuth2\Storage\Pdo as StoragePdo;
 use Phalcon\Flash\Direct as FlashDirect;
-use Phalcon\Flash\Session as FlashSession;
 
 // bshaffer
-use OAuth2\Server as OAuth2Server;
-use OAuth2\Storage\Pdo as StoragePdo;
+use Phalcon\Flash\Session as FlashSession;
+use Phalcon\Logger\Adapter\File as Logger;
+use Phalcon\Session\Adapter\Files as Session;
 
 $di['response'] = function() {
     return new Response();
@@ -23,6 +24,19 @@ $di['config'] = function() use ($config) {
 	return $config;
 };
 
+// Make a connection
+$di['db'] = function() {    
+    return new Mysql(
+        [
+            "host"     => "localhost",
+            "username" => "adis",
+            "password" => "",
+            "dbname"   => "bshaffer",
+            "port"     => 3306,
+        ]
+    );
+};
+
 $di['session'] = function() {
     $session = new Session();
 	$session->start();
@@ -30,9 +44,15 @@ $di['session'] = function() {
 	return $session;
 };
 
+
+$di->set('preflight', function() {
+    return new \App\Oauth\Listeners\PreFlightListener();
+}, true);
+
 $di['dispatcher'] = function() use ($di, $defaultModule) {
 
     $eventsManager = $di->getShared('eventsManager');
+
     $dispatcher = new Dispatcher();
     $dispatcher->setEventsManager($eventsManager);
 
@@ -42,7 +62,7 @@ $di['dispatcher'] = function() use ($di, $defaultModule) {
 $di['url'] = function() use ($config, $di) {
 	$url = new \Phalcon\Mvc\Url();
 
-    $url->setBaseUri($config->url['baseUrl']);
+    // $url->setBaseUri($config->url['baseUrl']);
 
 	return $url;
 };
@@ -112,9 +132,8 @@ $di->set(
     'cookies',
     function () {
         $cookies = new Cookies();
-
         $cookies->useEncryption(false);
-
+        
         return $cookies;
     }
 );

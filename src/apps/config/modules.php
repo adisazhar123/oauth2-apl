@@ -12,6 +12,16 @@ return array(
         'defaultController' => 'dashboard',
         'defaultAction' => 'index'
     ],
+    'client' => [
+        'namespace' => 'App\Client',
+        'webControllerNamespace' => 'App\Client\Controllers\Web',
+        'apiControllerNamespace' => 'App\Client\Controllers\Api',
+        'className' => 'App\Client\Module',
+        'path' => APP_PATH . '/modules/client/Module.php',
+        'defaultRouting' => true,
+        'defaultController' => 'dashboard',
+        'defaultAction' => 'index'
+    ],
 );
 
 ?>

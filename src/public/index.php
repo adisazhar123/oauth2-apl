@@ -10,12 +10,14 @@
     define('BASE_PATH', dirname(__DIR__));
     define('APP_PATH', BASE_PATH . '/apps');
 
+    define('BASE_URL', $_SERVER['SERVER_NAME']);
+
     date_default_timezone_set('Asia/Jakarta');
 
     require __DIR__ . '/../vendor/autoload.php';
 
     require_once APP_PATH . '/Bootstrap.php';
 
-    $app = new Bootstrap('oauth');
+    $app = new Bootstrap('client');
 
     $app->init();

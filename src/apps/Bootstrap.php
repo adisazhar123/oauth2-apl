@@ -3,7 +3,6 @@
 use Phalcon\Mvc\Application;
 use Phalcon\Debug;
 use Phalcon\DI\FactoryDefault;
-
 class Bootstrap extends Application
 {
 	private $modules;
@@ -31,7 +30,7 @@ class Bootstrap extends Application
 		 */
 		$this->registerModules($this->modules);
 
-		echo $this->handle()->getContent();
+		echo $this->handle()->getContent();			
 	}
 
 	private function _registerServices()
@@ -50,6 +49,9 @@ class Bootstrap extends Application
 		include_once APP_PATH . '/config/loader.php';
 		include_once APP_PATH . '/config/services.php';
 		include_once APP_PATH . '/config/routing.php';
+		
+		$dotenv = \Dotenv\Dotenv::create(__DIR__ . '/../');
+		$dotenv->load();
 
 		$this->setDI($di);
 	}

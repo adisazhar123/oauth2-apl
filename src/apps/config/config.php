@@ -10,11 +10,11 @@ return new Config(
 
         'database' => [
             'adapter' => 'Phalcon\Db\Adapter\Pdo\Sqlsrv',
-            'host' => 'localhost',
-            'username' => 'adis',
-            'password' => '',
-            'dbname' => 'bshaffer',
-            'dsn' => 'mysql:dbname=bshaffer;host=localhost'
+            'host' => getenv('DB_HOST') || 'localhost',
+            'username' => getenv('DB_USER') ,
+            'password' => getenv('DB_PASS'),
+            'dbname' => getenv('DB_SCHEMA'),
+            'dsn' => getenv('DB_PROVIDER') . ':' . 'dbname='. getenv('DB_SCHEMA') .';host= '. getenv('DB_HOST')                
         ],   
         
         'url' => [
