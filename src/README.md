@@ -1,6 +1,6 @@
 ### Installation
 1. Import src/apps/modules/oauth/data/db-structure.sql
-2. Copy `.env.example` to `.env`
+2. Run `composer install` and Copy `.env.example` to `.env`
 3. Fill `.env` variables 
 4. Start webserver. Please use port 80 :/
 5. Got to `HOST_URL/oauth/newclient` to register a new client. Copy the `client_id` and `client_secret` into `.env` variables
