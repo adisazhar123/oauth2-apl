@@ -18,6 +18,10 @@
 
     require_once APP_PATH . '/Bootstrap.php';
 
-    $app = new Bootstrap('client');
-
-    $app->init();
+    try {
+        $app = new Bootstrap('client');    
+        $app->init();        
+    } catch(\Exception $e) {
+        echo $e->getMessage();
+        return;
+    }

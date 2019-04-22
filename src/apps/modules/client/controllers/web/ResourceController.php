@@ -25,10 +25,10 @@ class ResourceController extends Controller {
             $responseBodyAsString = $response->getBody()->getContents();
             $this->_response->setJsonContent(json_decode($responseBodyAsString, true));
             $this->_response->setStatusCode(401, 'Unauthorized');
-                        
-            return $this->_response;
-        }
 
+            return $this->_response;
+        }        
+        
         //Set the content of the response
         $this->_response->setJsonContent(json_decode($response->getBody(), true));
 

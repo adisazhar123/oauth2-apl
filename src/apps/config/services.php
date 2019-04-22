@@ -25,17 +25,17 @@ $di['config'] = function() use ($config) {
 };
 
 // Make a connection
-$di['db'] = function() {    
+$di->setShared('db', function() {    
     return new Mysql(
         [
-            "host"     => "localhost",
-            "username" => "adis",
-            "password" => "",
-            "dbname"   => "bshaffer",
-            "port"     => 3306,
+            "host"     => getenv('DB_HOST'),
+            "username" => getenv('DB_USER'),
+            "password" => getenv('DB_password'),
+            "dbname"   => getenv('DB_SCHEMA'),
+            "port"     => getenv('DB_PORT'),
         ]
     );
-};
+});
 
 $di['session'] = function() {
     $session = new Session();

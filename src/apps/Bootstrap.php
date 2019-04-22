@@ -18,6 +18,10 @@ class Bootstrap extends Application
 	{		
 		$this->_registerServices();
 
+		if (!$this->getDI()['db']->connect()) {
+			return "Please turn on DB connection";
+		}
+		
 		$config = $this->getDI()['config'];
 
 		if ($config->mode == 'DEVELOPMENT') {
