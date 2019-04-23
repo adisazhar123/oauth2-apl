@@ -24,20 +24,16 @@ class ResourceController extends Controller
             $err_body = $err->getResponseBody();
             // Send response to client
             $this->_response->setStatusCode($status_code, 'Unauthorized');
-            $this->_response->setContent(json_encode(['success' => false, 'message' => 'Access token is wrong', 'code' => $status_code]));
+            $this->_response->setContent(json_encode(['success' => false, 'message' => 'Access token is wrong', 'code' => $status_code, 'code_desc' => 'Unauthorized']));
             $this->_response->send();
             return;            
-        }
+        }        
         
-        $this->_response->setStatusCode(200, 'Ok');
-        $this->_response->setContent(json_encode(['success' => true, 'message' => 'Access token is good', 'code' => 200]));
+        // Send response to client
+        $this->_response->setStatusCode(200, 'OK');
+        $this->_response->setContent(json_encode(['success' => true, 'message' => INCLUDE dirname(__FILE__)  . '/../../data/friends.php', 'code' => 200, 'code_desc' => 'Ok']));
         $this->_response->send();
         return;
-        // Send response to client
-        // $this->_response->setStatusCode(200, 'OK');
-        // $this->_response->setContent(json_encode(['success' => true, 'friends' => INCLUDE dirname(__FILE__)  . '/../../data/friends.php']));
-        // $this->_response->send();
-        // return;
     }
 
 }

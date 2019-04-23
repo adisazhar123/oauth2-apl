@@ -19,22 +19,15 @@ class ResourceController extends Controller {
         // and use it to request the resource        
 
         $data['queries'] = "access_token=" . $access_token;
-        $data['endpoint'] = "dev.oauth/oauth/resource?";
+        $data['endpoint'] =  BASE_URL . "/oauth/resource?";
         
-
         // call get friends API
-        $response = $this->_resource_service->getFriends($data);
-        return json_encode($response);
+        $response = $this->_resource_service->getFriends($data);        
 
-        // return $response;
-        $decoded_res = json_decode($response, true);
+        $this->_response->setJsonContent($response);
+        $this->_response->setStatusCode($response['code'], $response['code_desc']);
 
-        // return json_encode($decoded_res);
-
-        $this->_response->setJsonContent($decoded_res['message']);
-        $this->_response->setStatusCode($decoded_res['code'], $decoded_res['code_desc']);
-
-        // //Return the response
+        //Return the response
         return $this->_response;   
     }
 

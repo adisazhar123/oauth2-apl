@@ -54,8 +54,7 @@
 
 <script>
 $(function(){
-    const BASE_URL = $("#base_url").val();        
-    console.log("PP")
+    const BASE_URL = $("#base_url").val();            
 
     async function getFriends() {
         let friends_res;
@@ -76,7 +75,7 @@ $(function(){
             return;
         }
         let html = '';
-        friends_res.friends.map((el, idx) => {
+        friends_res.message.map((el, idx) => {
             html += `<p>${el}</p>`;
         });
 

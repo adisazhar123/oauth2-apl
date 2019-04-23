@@ -13,28 +13,19 @@ class ResourceService implements IResource {
         $this->_http_client = $http;        
     }
 
-    public function getFriends($data) {
-        try {
-            // $response = $this->_http_client->post($data);   
+    public function getFriends($data) {        
+        $ch = curl_init();
+        // do POST request to oauth/token endpoint        
+        curl_setopt($ch, CURLOPT_URL, $data['endpoint'] . $data['queries']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);        
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 
-            // $c = new \GuzzleHttp\Client(); 
-            // $res = $c->request('POST', $data['endpoint'] . $data['queries']);
-
-            $access_token = 'c063dec456f91d6c1d0417a507c2ac44f1e2a256';
-            // and use it to request the resource
-            $client = new \GuzzleHttp\Client();
-            $response = $client->request('POST', 'dev.oauth/oauth/resource?access_token=' . $access_token);
-            
-            return $response;
-            
-        } catch(\GuzzleHttp\Exception\BadResponseException $e) { //Every 4xx, 5xx codes must be caught
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            return json_encode(['message' => json_decode($responseBodyAsString)->message, 'code' => 401, 'code_desc' => 'Unauthorized']);
-        }
-
-        // return json_encode($response);
-
-        return json_encode(['message' => $response->getBody(), 'code' => 200, 'code_desc' => 'Ok']);
+        $result = curl_exec($ch);
+        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close ($ch);
+        
+        $decoded_res = json_decode($result, true);
+        
+        return ['message' => $decoded_res['message'], 'code' => $decoded_res['code'], 'code_desc' => $decoded_res['code_desc']];
     }
 }
