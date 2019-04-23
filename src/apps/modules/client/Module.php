@@ -80,12 +80,16 @@ class Module implements ModuleDefinitionInterface
             ]
         ]);
 
+        $di->set('curl_http', function() {
+            return new \App\Client\Services\CurlHttpRequest();
+        });
+
         $di->set('resource_service', [
             'className' => 'App\Client\Services\ResourceService',
             'arguments' => [
                 [
                     'type' => 'service',
-                    'name' => 'guzzle_http'
+                    'name' => 'curl_http'
                 ]
             ]
         ]);

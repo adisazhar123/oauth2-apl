@@ -46,8 +46,8 @@ class Bootstrap extends Application
 		$modules = $this->modules;
 
 		$data_source_name = 'mysql:dbname=bshaffer;host=localhost';
-		$username = 'adis';
-		$password = '';
+		$username = getenv('DB_USER');
+		$password = getenv('DB_PASSWORD');
 
 		include_once APP_PATH . '/config/constants.php';
 		include_once APP_PATH . '/config/loader.php';

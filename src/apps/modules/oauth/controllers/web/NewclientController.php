@@ -31,6 +31,8 @@ class NewclientController extends Controller
         $oauth_client = new OauthClient();
         $oauth_client->client_id = $client_id;
         $oauth_client->client_secret = $client_secret;
+        $oauth_client->redirect_uri = BASE_URL;
+        
         $oauth_client->create();        
 
         // return value to client

@@ -8,6 +8,7 @@ class OauthClient extends Model
 {
     public $client_id;
     public $client_secret;
+    public $redirect_uri;
 
     public function initialize()
     {

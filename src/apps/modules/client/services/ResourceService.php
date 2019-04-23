@@ -14,15 +14,17 @@ class ResourceService implements IResource {
     }
 
     public function getFriends($data) {        
-        $ch = curl_init();
-        // do POST request to oauth/token endpoint        
-        curl_setopt($ch, CURLOPT_URL, $data['endpoint'] . $data['queries']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);        
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        // $ch = curl_init();
+        // // do POST request to oauth/token endpoint
+        // curl_setopt($ch, CURLOPT_URL, $data['endpoint'] . $data['queries']);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 
-        $result = curl_exec($ch);
-        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close ($ch);
+        // $result = curl_exec($ch);
+        // $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // curl_close ($ch);
+
+        $result = $this->_http_client->postWithoutAuth($data);
         
         $decoded_res = json_decode($result, true);
         
