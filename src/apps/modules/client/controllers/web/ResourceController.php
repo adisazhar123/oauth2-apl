@@ -7,32 +7,34 @@ use Phalcon\Mvc\Controller;
 class ResourceController extends Controller {
 
     private $_response;
+    private $_resource_service;
 
     public function initialize() {        
-        $this->_response = $this->di->get('response');        
+        $this->_response = $this->di->get('response');
+        $this->_resource_service = $this->di->get('resource_service');
     }
     
     public function indexAction() {        
         $access_token = $this->cookies->get('access_token');  // get the access_token stored in cookies
-        // and use it to request the resource
+        // and use it to request the resource        
 
-        $client = new \GuzzleHttp\Client();
+        $data['queries'] = "access_token=" . $access_token;
+        $data['endpoint'] = "dev.oauth/oauth/resource?";
         
-        try {
-            $response = $client->request('POST', 'dev.oauth/oauth/resource?access_token=' . $access_token);
-        } catch(\GuzzleHttp\Exception\BadResponseException $e) { //Every 4xx, 5xx codes must be caught
-            $response = $e->getResponse();
-            $responseBodyAsString = $response->getBody()->getContents();
-            $this->_response->setJsonContent(json_decode($responseBodyAsString, true));
-            $this->_response->setStatusCode(401, 'Unauthorized');
 
-            return $this->_response;
-        }        
-        
-        //Set the content of the response
-        $this->_response->setJsonContent(json_decode($response->getBody(), true));
+        // call get friends API
+        $response = $this->_resource_service->getFriends($data);
+        return json_encode($response);
 
-        //Return the response
+        // return $response;
+        $decoded_res = json_decode($response, true);
+
+        // return json_encode($decoded_res);
+
+        $this->_response->setJsonContent($decoded_res['message']);
+        $this->_response->setStatusCode($decoded_res['code'], $decoded_res['code_desc']);
+
+        // //Return the response
         return $this->_response;   
     }
 

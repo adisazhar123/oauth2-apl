@@ -2,11 +2,11 @@
 
 namespace App\Client;
 
-use Phalcon\DiInterface;
 use Phalcon\Loader;
-use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Mvc\View;
+use Phalcon\DiInterface;
 use Phalcon\Mvc\View\Engine\Volt;
+use Phalcon\Mvc\ModuleDefinitionInterface;
 
 class Module implements ModuleDefinitionInterface
 {   
@@ -20,7 +20,9 @@ class Module implements ModuleDefinitionInterface
         $loader->registerNamespaces([
             'App\Client\Controllers\Web' => __DIR__ . '/controllers/web',
             'App\Client\Controllers\Api' => __DIR__ . '/controllers/api',
-            'App\Client\Models' => __DIR__ . '/models'
+            'App\Client\Models' => __DIR__ . '/models',
+            'App\Client\Services' => __DIR__ . '/services',
+            'App\Client\Contracts' => __DIR__ . '/contracts',
         ]);
 
         $loader->register();
@@ -49,6 +51,44 @@ class Module implements ModuleDefinitionInterface
             $config = INCLUDE dirname(__FILE__) . '/config/config.php';
             return $config;
         });
+
+        $di->set('token_service', function() {
+            return new \App\Client\Services\RequestTokenService();
+        });
+
+        // $di->set('resource_service', function() {
+        //     return new \App\Client\Services\ResourceService();
+        // });
+        
+
+        // $di->set('guzzle_http', function() {
+        //     return new \App\Client\Services\GuzzleHttpRequest();
+        // });
+
+        $di->set('guzzle_client', function() {
+            return new \GuzzleHttp\Client();
+        });
+    
+
+        $di->set('guzzle_http', [
+            'className' => 'App\Client\Services\GuzzleHttpRequest',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'guzzle_client'
+                ]
+            ]
+        ]);
+
+        $di->set('resource_service', [
+            'className' => 'App\Client\Services\ResourceService',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'guzzle_http'
+                ]
+            ]
+        ]);
     }
 }
 ?>

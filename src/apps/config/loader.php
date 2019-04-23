@@ -7,9 +7,9 @@ $loader = new \Phalcon\Loader();
 /**
   * Load library namespace
   */
-$loader->registerNamespaces(array(
-	
+$loader->registerNamespaces([
+  
+]);
 
-));
 
 $loader->register();
