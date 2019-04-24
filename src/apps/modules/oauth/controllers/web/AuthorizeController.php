@@ -30,9 +30,7 @@ class AuthorizeController extends Controller
         
         // show auth form to authorize
         if($auth['message'] == 'authorize form')
-            return $this->view->pick($auth['view']);
-
-        // return $auth['client_url'];
+            return $this->view->pick($auth['view']);        
 
         // redirect to client URL once authorized
         $this->_response->redirect($auth['client_url']);

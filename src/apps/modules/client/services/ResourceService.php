@@ -13,7 +13,7 @@ class ResourceService implements IResource {
         $this->_http_client = $http;        
     }
 
-    public function getFriends($data) {        
+    public function getFriends($data) {
         $result = $this->_http_client->postWithoutAuth($data);
         $decoded_res = json_decode($result, true);
         

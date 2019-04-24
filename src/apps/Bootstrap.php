@@ -46,11 +46,7 @@ class Bootstrap extends Application
 
 		$di = new FactoryDefault();
 		$config = require APP_PATH . '/config/config.php';
-		$modules = $this->modules;
-
-		$data_source_name = 'mysql:dbname=bshaffer;host=localhost';
-		$username = 'adis';
-		$password = '';
+		$modules = $this->modules;		
 
 		include_once APP_PATH . '/config/constants.php';
 		include_once APP_PATH . '/config/loader.php';

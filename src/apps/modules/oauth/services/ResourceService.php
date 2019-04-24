@@ -21,8 +21,6 @@ class ResourceService implements IResource {
             return ['success' => false, 'message' => 'Access token is wrong', 'code' => 401, 'code_desc' => 'Unauthorized'];
         }
 
-        // return 'ok';
-
         return $this->getFriends();
 
     }

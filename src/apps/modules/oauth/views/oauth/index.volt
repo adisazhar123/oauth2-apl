@@ -47,7 +47,7 @@
                             <button class="btn btn-primary" type="submit">Add More</button>
                         </form>
 
-                        <h5>My registered cliets:</h5>
+                        <h5>My registered clients:</h5>
                         {% for client in clients %}
                             <div class="client">
                                 <p>Client ID: {{ client.client_id }} <br>

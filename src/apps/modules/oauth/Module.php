@@ -33,7 +33,11 @@ class Module implements ModuleDefinitionInterface
      * Register specific services for the module
      */
     public function registerServices(DiInterface $di = null)
-    {
+    {                
+        $data_source_name = getenv('DB_PROVIDER') . ':dbname='. getenv('DB_SCHEMA') .';host=' . getenv('DB_HOST');
+		$username = getenv('DB_USER');
+        $password = getenv('DB_PASSWORD');
+        
         // Registering the view component
         $di['view'] = function () {
             $view = new View();
@@ -48,83 +52,103 @@ class Module implements ModuleDefinitionInterface
             return $view;
         };
 
-        // $di->setShared('oauth_storage', function() use ($data_source_name, $username, $password) {
-        //     $storage = new StoragePdo(array('dsn' => $data_source_name, 'username' => $username, 'password' => $password));
+        $di->setShared('oauth_storage', function() use ($data_source_name, $username, $password) {
+            $storage = new StoragePdo(array('dsn' => $data_source_name, 'username' => $username, 'password' => $password));
         
-        //     return $storage;
-        // });
+            return $storage;
+        });
         
-        // $di->setShared('client_credentials_grant', function() {
-        //     $storage = $this->get('oauth_storage');
-        //     return new OAuth2\GrantType\ClientCredentials($storage);
-        // });
+        $di->setShared('client_credentials_grant', function() {
+            $storage = $this->get('oauth_storage');
+            return new \OAuth2\GrantType\ClientCredentials($storage);
+        });
         
-        // $di->setShared('authorization_code_grant', function() {
-        //     $storage = $this->get('oauth_storage');
-        //     return new OAuth2\GrantType\AuthorizationCode($storage);
-        // });
-
-        // $di->setShared('bshaffer_oauth_instance', function() use ($data_source_name, $username, $password) {
-        //     $storage = $this->get('oauth_storage');
-        //     $oauth_server = new OAuth2Server($storage);
+        $di->setShared('authorization_code_grant', function() {
+            $storage = $this->get('oauth_storage');
+            return new \OAuth2\GrantType\AuthorizationCode($storage);
+        });
+        
+        $di->setShared('bshaffer_oauth_instance', function() {
+            $storage = $this->get('oauth_storage');
+            $oauth_server = new OAuth2Server($storage);
             
-        //     $client_credentials_grant = $this->get('client_credentials_grant');
-        //     $oauth_server->addGrantType($client_credentials_grant);
+            $client_credentials_grant = $this->get('client_credentials_grant');
+            $oauth_server->addGrantType($client_credentials_grant);
             
-        //     $authorization_code_grant = $this->get('authorization_code_grant');
-        //     $oauth_server->addGrantType($authorization_code_grant);
+            $authorization_code_grant = $this->get('authorization_code_grant');
+            $oauth_server->addGrantType($authorization_code_grant);
         
-        //     return $oauth_server;
-        // });        
-
-        // $di->set('oauth_server', [
-        //     'className' => 'App\Oauth\Services\BshafferOauthServer',
-        //     'arguments' => [
-        //         [
-        //             'type' => 'service',
-        //             'name' => 'bshaffer_oauth_instance'
-        //         ]
-        //     ]
-        // ]);
-
-        // $di->set('bshaffer_oauth_response', function() {
-        //     return new \OAuth2\Response();
-        // });
-
-
-        // $di->set('bshaffer_oauth_response', [
-        //     'className' => 'App\Oauth\Services\BshafferOauthResponse',
-        //     'arguments' => [
-        //         [
-        //             'type' => 'service',
-        //             'name' => 'bshaffer_oauth_response'
-        //         ]
-        //     ]
-        // ]);
-
-        // $di->set('bshaffer_oauth_request', 'App\Oauth\Services\BshafferOauthRequest');
-
-
-        // $di->set('authorize_service', [
-        //     'className' => 'App\Oauth\Services\AuthorizeService',
-        //     'arguments' => [
-        //         [
-        //             'type' => 'service',
-        //             'name' => 'oauth_server'
-        //         ],
-        //         [
-        //             'type' => 'service',
-        //             'name' => 'bshaffer_oauth_response'
-        //         ],
-        //         [
-        //             'type' => 'service',
-        //             'name' => 'bshaffer_oauth_request'
-        //         ]
-        //     ]
-        // ]);
-
+            return $oauth_server;
+        });        
         
-
+        $di->setShared('oauth_server', [
+            'className' => 'App\Oauth\Services\BshafferOauthServer',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'bshaffer_oauth_instance'
+                ]
+            ]
+        ]);
+        
+        $di->set('bshaffer_oauth_response_instance', function() {
+            return new \OAuth2\Response();
+        });
+        
+        
+        $di->set('bshaffer_oauth_response', [
+            'className' => 'App\Oauth\Services\BshafferOauthResponse',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'bshaffer_oauth_response_instance'
+                ]
+            ]
+        ]);
+        
+        $di->set('bshaffer_oauth_request', function() {
+            return new \App\Oauth\Services\BshafferOauthRequest();
+        });
+        
+        
+        $di->set('authorize_service', [
+            'className' => 'App\Oauth\Services\AuthorizeService',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'oauth_server'
+                ],
+                [
+                    'type' => 'service',
+                    'name' => 'bshaffer_oauth_response'
+                ],
+                [
+                    'type' => 'service',
+                    'name' => 'bshaffer_oauth_request'
+                ]
+            ]
+        ]);
+        
+        $di->set('resource_service_server', [
+            'className' => 'App\Oauth\Services\ResourceService',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'oauth_server'
+                ]
+            ]
+        ]);
+        
+        $di->set('token_service', [
+            'className' => 'App\Oauth\Services\TokenService',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'oauth_server'
+                ]
+            ]
+        ]);        
+        
     }
 }
 ?>

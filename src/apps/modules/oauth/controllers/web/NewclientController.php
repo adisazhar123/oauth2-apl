@@ -8,8 +8,7 @@ use App\Oauth\Models\OauthClient;
 class NewclientController extends Controller
 {
     private $_request;
-    private $_response;
-    // private $_db_connection;
+    private $_response;    
 
     public function initialize() {        
         $this->_response = $this->di->get('response');

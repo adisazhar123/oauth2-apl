@@ -52,19 +52,6 @@ class Module implements ModuleDefinitionInterface
             return $config;
         });
 
-        // $di->set('token_service', function() {
-        //     return new \App\Client\Services\RequestTokenService();
-        // });
-
-        // $di->set('resource_service', function() {
-        //     return new \App\Client\Services\ResourceService();
-        // });
-        
-
-        // $di->set('guzzle_http', function() {
-        //     return new \App\Client\Services\GuzzleHttpRequest();
-        // });
-
         $di->set('guzzle_client', function() {
             return new \GuzzleHttp\Client();
         });
