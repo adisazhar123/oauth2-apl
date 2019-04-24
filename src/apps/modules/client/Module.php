@@ -52,9 +52,9 @@ class Module implements ModuleDefinitionInterface
             return $config;
         });
 
-        $di->set('token_service', function() {
-            return new \App\Client\Services\RequestTokenService();
-        });
+        // $di->set('token_service', function() {
+        //     return new \App\Client\Services\RequestTokenService();
+        // });
 
         // $di->set('resource_service', function() {
         //     return new \App\Client\Services\ResourceService();
@@ -86,6 +86,16 @@ class Module implements ModuleDefinitionInterface
 
         $di->set('resource_service', [
             'className' => 'App\Client\Services\ResourceService',
+            'arguments' => [
+                [
+                    'type' => 'service',
+                    'name' => 'curl_http'
+                ]
+            ]
+        ]);
+
+        $di->set('token_service', [
+            'className' => 'App\Client\Services\RequestTokenService',
             'arguments' => [
                 [
                     'type' => 'service',

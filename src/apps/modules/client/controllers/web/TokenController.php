@@ -23,6 +23,11 @@ class TokenController extends Controller
         // request token with given auth_code
         $token_result = $this->_token_service->requestToken($auth_code);
 
+        // error requesting token
+        if(isset($token_result['error'])) {
+            return json_encode($token_result);
+        }
+
         // save access_token in cookie
         $this->cookies->set(
             'access_token',
