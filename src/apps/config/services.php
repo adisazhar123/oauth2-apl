@@ -219,6 +219,16 @@ $di->set('authorize_service', [
     ]
 ]);
 
+$di->set('resource_service_server', [
+    'className' => 'App\Oauth\Services\ResourceService',
+    'arguments' => [
+        [
+            'type' => 'service',
+            'name' => 'oauth_server'
+        ]
+    ]
+]);
+
 // $di->setShared('oauth_storage', function() use ($data_source_name, $username, $password) {
 //     $storage = new StoragePdo(array('dsn' => $data_source_name, 'username' => $username, 'password' => $password));
 
