@@ -16,7 +16,7 @@ class TokenController extends Controller
         $this->_token_service = $this->di->get('token_service');
     }
 
-    public function indexAction() {        
+    public function indexAction() {
         // get auth_code in query string returned from oauth server
         $auth_code = $this->request->getQuery('authorization_code');
         

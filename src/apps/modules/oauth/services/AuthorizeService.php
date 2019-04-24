@@ -18,21 +18,18 @@ class AuthorizeService implements IAuthorize {
         $this->_oauth_request = $oauth_req;
     }
 
-    public function authorize($post_data) {
+    public function authorize($post_data, $queries) {
+        $state = $queries['state'];
+
         // validate the authorize request
         if (!$this->_oauth_server->validateAuthorizeRequest($this->_oauth_request->createRequest(), $this->_oauth_response->getInstance())) {
-            $this->_oauth_response->send();
+            $this->_oauth_response->sendResponse();
             die;
         }
         // display an authorization form
         // TODO: retrieve from view and style it!
         if (empty($post_data)) {
-            return ['message' => 'authorize form', 'view' => '<form method="post">
-            <label>Do You Authorize TestClient?</label><br />
-            <p>TestClient will receive <strong>all</strong> your TCBook friends.</p>
-            <input type="submit" name="authorized" value="yes">
-            <input type="submit" name="authorized" value="no">
-            </form>'];
+            return ['message' => 'authorize form', 'view' => 'oauth/authorize'];
         }
         
         $is_authorized = ($post_data['authorized'] === 'yes');
@@ -40,7 +37,7 @@ class AuthorizeService implements IAuthorize {
        
         if ($is_authorized) {
             $code = substr($this->_oauth_response->getHttpHeader('Location'), strpos($this->_oauth_response->getHttpHeader('Location'), 'code=')+5, 40);            
-            return ['message' => 'authorized', 'client_url' => 'client/token?authorization_code=' . $code];
+            return ['message' => 'authorized', 'client_url' => 'client/token?authorization_code=' . $code . '&state=' . $state];
             // $this->_oauth_response->redirect('client/token?authorization_code=' . $code);
         } else {
             $code = substr($this->_oauth_response->getHttpHeader('Location'), strpos($this->_oauth_response->getHttpHeader('Location'), 'code=')+5, 40);            

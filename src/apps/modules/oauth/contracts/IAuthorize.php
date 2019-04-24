@@ -3,5 +3,5 @@
 namespace App\Oauth\Contracts;
 
 interface IAuthorize {
-    public function authorize($post_data);
+    public function authorize($post_data, $queries);
 }
