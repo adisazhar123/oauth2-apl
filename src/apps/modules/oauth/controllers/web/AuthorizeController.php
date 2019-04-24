@@ -25,7 +25,7 @@ class AuthorizeController extends Controller
         $auth = $this->_authorize_service->authorize($post_data);        
         
         // show auth form to authorize
-        if($auth['message'] != 'authorized')
+        if($auth['message'] == 'authorize form')
             return $auth['view'];
 
         // redirect to client URL once authorized

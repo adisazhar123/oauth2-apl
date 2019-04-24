@@ -19,9 +19,6 @@ class AuthorizeService implements IAuthorize {
     }
 
     public function authorize($post_data) {
-        $request = \OAuth2\Request::createFromGlobals();
-        $response = new \OAuth2\Response();
-
         // validate the authorize request
         if (!$this->_oauth_server->validateAuthorizeRequest($this->_oauth_request->createRequest(), $this->_oauth_response->getInstance())) {
             $this->_oauth_response->send();
@@ -41,10 +38,13 @@ class AuthorizeService implements IAuthorize {
         $is_authorized = ($post_data['authorized'] === 'yes');
         $this->_oauth_server->handleAuthorizeRequest($this->_oauth_request->createRequest(), $this->_oauth_response->getInstance(), $is_authorized);
        
-        if ($is_authorized) {                    
+        if ($is_authorized) {
             $code = substr($this->_oauth_response->getHttpHeader('Location'), strpos($this->_oauth_response->getHttpHeader('Location'), 'code=')+5, 40);            
             return ['message' => 'authorized', 'client_url' => 'client/token?authorization_code=' . $code];
             // $this->_oauth_response->redirect('client/token?authorization_code=' . $code);
+        } else {
+            $code = substr($this->_oauth_response->getHttpHeader('Location'), strpos($this->_oauth_response->getHttpHeader('Location'), 'code=')+5, 40);            
+            return ['message' => 'unauthorized', 'client_url' => 'client'];
         }
     }
 }

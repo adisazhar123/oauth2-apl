@@ -229,6 +229,16 @@ $di->set('resource_service_server', [
     ]
 ]);
 
+$di->set('token_service', [
+    'className' => 'App\Oauth\Services\TokenService',
+    'arguments' => [
+        [
+            'type' => 'service',
+            'name' => 'oauth_server'
+        ]
+    ]
+]);
+
 // $di->setShared('oauth_storage', function() use ($data_source_name, $username, $password) {
 //     $storage = new StoragePdo(array('dsn' => $data_source_name, 'username' => $username, 'password' => $password));
 

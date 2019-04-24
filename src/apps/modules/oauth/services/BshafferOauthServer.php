@@ -7,11 +7,16 @@ use App\Oauth\Contracts\IOauthServer;
 
 class BshafferOauthServer implements IOauthServer {    
     public $oauth_server;
-
+    /**
+     * @param OAuth2\Server $server
+     */
     public function __construct($server) {
         $this->oauth_server = $server;
     }
-
+    /**
+     * @param OAuth2\Request::createFromGlobals()
+     * 
+     */
     public function verifyResourceRequest($request_data) {
         return $this->oauth_server->verifyResourceRequest($request_data);
     }
