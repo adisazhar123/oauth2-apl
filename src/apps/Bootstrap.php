@@ -40,22 +40,23 @@ class Bootstrap extends Application
 	private function _registerServices()
 	{
 		$defaultModule = $this->defaultModule;
+		
+		$dotenv = \Dotenv\Dotenv::create(__DIR__ . '/../');
+		$dotenv->load();
 
 		$di = new FactoryDefault();
 		$config = require APP_PATH . '/config/config.php';
 		$modules = $this->modules;
 
 		$data_source_name = 'mysql:dbname=bshaffer;host=localhost';
-		$username = getenv('DB_USER');
-		$password = getenv('DB_PASSWORD');
+		$username = 'adis';
+		$password = '';
 
 		include_once APP_PATH . '/config/constants.php';
 		include_once APP_PATH . '/config/loader.php';
 		include_once APP_PATH . '/config/services.php';
 		include_once APP_PATH . '/config/routing.php';
 		
-		$dotenv = \Dotenv\Dotenv::create(__DIR__ . '/../');
-		$dotenv->load();
 
 		$this->setDI($di);
 	}

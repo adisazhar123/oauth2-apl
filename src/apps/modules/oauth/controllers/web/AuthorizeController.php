@@ -10,40 +10,25 @@ class AuthorizeController extends Controller
     private $_oauth_server;
     private $_response;
 
+    private $_authorize_service;
+
     public function initialize() {
         $this->_oauth_server = $this->di->get('oauth_server');
         $this->_response = $this->di->get('response');
+        $this->_authorize_service = $this->di->get('authorize_service');
     }
 
     public function indexAction() {
-        $request = \OAuth2\Request::createFromGlobals();
-        $response = new \OAuth2\Response();
-
-        // validate the authorize request
-        if (!$this->_oauth_server->validateAuthorizeRequest($request, $response)) {
-            $response->send();
-            die;
-        }
-        // display an authorization form
-        // TODO: retrieve from view and style it!
-        if (empty($_POST)) {
-            exit('
-            <form method="post">
-            <label>Do You Authorize TestClient?</label><br />
-            <p>TestClient will receive <strong>all</strong> your TCBook friends.</p>
-            <input type="submit" name="authorized" value="yes">
-            <input type="submit" name="authorized" value="no">
-            </form>');
-        }
+        // Save POST data
+        $post_data = $_POST;
+        // authorize client, pass in POST data
+        $auth = $this->_authorize_service->authorize($post_data);        
         
-        $is_authorized = ($_POST['authorized'] === 'yes');
-        $this->_oauth_server->handleAuthorizeRequest($request, $response, $is_authorized);
-       
-        if ($is_authorized) {                    ;
-            $code = substr($response->getHttpHeader('Location'), strpos($response->getHttpHeader('Location'), 'code=')+5, 40);            
-            // return "OMG IM HERE" . $code;
-            // redirect to client URL
-            $this->_response->redirect('client/token?authorization_code=' . $code);                
-        }     
+        // show auth form to authorize
+        if($auth['message'] != 'authorized')
+            return $auth['view'];
+
+        // redirect to client URL once authorized
+        $this->_response->redirect($auth['client_url']);
     }
 }

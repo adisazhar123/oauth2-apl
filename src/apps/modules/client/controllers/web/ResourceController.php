@@ -9,12 +9,12 @@ class ResourceController extends Controller {
     private $_response;
     private $_resource_service;
 
-    public function initialize() {        
+    public function initialize() {
         $this->_response = $this->di->get('response');
         $this->_resource_service = $this->di->get('resource_service');
     }
     
-    public function indexAction() {        
+    public function indexAction() {
         $access_token = $this->cookies->get('access_token');  // get the access_token stored in cookies
         // and use it to request the resource        
 
@@ -22,7 +22,7 @@ class ResourceController extends Controller {
         $data['endpoint'] =  BASE_URL . "/oauth/resource?";
         
         // call get friends API
-        $response = $this->_resource_service->getFriends($data);        
+        $response = $this->_resource_service->getFriends($data);
 
         $this->_response->setJsonContent($response);
         $this->_response->setStatusCode($response['code'], $response['code_desc']);

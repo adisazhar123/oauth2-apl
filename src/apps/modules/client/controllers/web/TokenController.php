@@ -16,13 +16,13 @@ class TokenController extends Controller
         $this->_token_service = $this->di->get('token_service');
     }
 
-    public function indexAction() {
+    public function indexAction() {        
         // get auth_code in query string returned from oauth server
-        $auth_code = $this->request->getQuery('authorization_code');                
+        $auth_code = $this->request->getQuery('authorization_code');
         
         // request token with given auth_code
         $token_result = $this->_token_service->requestToken($auth_code);
-        
+
         // save access_token in cookie
         $this->cookies->set(
             'access_token',
@@ -30,7 +30,8 @@ class TokenController extends Controller
             time() + $token_result['expires_in']
         );
         
-        $this->cookies->send();        
+        $this->cookies->send();
+        
         // redirect to client page
         $this->_response->redirect('client');
     }

@@ -21,7 +21,7 @@ class RequestTokenService implements IToken {
 
         $result = curl_exec($ch);
         $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close ($ch);
+        curl_close ($ch);        
 
         $token_result = json_decode($result, true); 
         // return token
